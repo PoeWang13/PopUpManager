@@ -29,6 +29,7 @@ public class PopUp_Manager : MonoSingletion<PopUp_Manager>
 
     private bool isActive = false;
     private PopUp myPopUp = new PopUp();
+    private PopUp myUsingPopUp;
     private Queue<PopUp> popUps = new Queue<PopUp>();
 
     [Header("Pozitif Button Atamaları")]
@@ -57,6 +58,18 @@ public class PopUp_Manager : MonoSingletion<PopUp_Manager>
         FadeTimer = FadeTime(myPopUp.fadeInDuration);
         pozitifButton.onClick.AddListener(PopUpPozitifAnswer);
         negatifButton.onClick.AddListener(PopUpNegatifAnswer);
+    }
+    // PopUp Panel Ayarlandıktan sonra paneli göstermek için çağrılır. Bu yüzden en son yazılması gerekir.
+    public PopUp_Manager PopUpPanelGoster()
+    {
+        popUps.Enqueue(myPopUp);
+        // Temizle Herşeyi
+        myPopUp = new PopUp();
+        if (!isActive)
+        {
+            SiradakiPopUpGoster();
+        }
+        return Instance;
     }
     public PopUp_Manager SetInputAction(UnityAction<int> inputAction)
     {
@@ -148,17 +161,6 @@ public class PopUp_Manager : MonoSingletion<PopUp_Manager>
         myPopUp.negatifUnityAction = negatifAction;
         return Instance;
     }
-    public PopUp_Manager PopUpPanelGoster()
-    {
-        popUps.Enqueue(myPopUp);
-        // Temizle Herşeyi
-        myPopUp = new PopUp();
-        if (!isActive)
-        {
-            SiradakiPopUpGoster();
-        }
-        return Instance;
-    }
     private void PopUpPozitifAnswer()
     {
         if (inputActive)
@@ -187,18 +189,18 @@ public class PopUp_Manager : MonoSingletion<PopUp_Manager>
     }
     private void SiradakiPopUpGoster()
     {
-        myPopUp = popUps.Dequeue();
+        myUsingPopUp = popUps.Dequeue();
 
-        titleText.text = myPopUp.title;
-        messageText.text = myPopUp.message;
-        pozitifButtonImage.color = myPopUp.pozitifButtonColor;
-        negatifButtonImage.color = myPopUp.negatifButtonColor;
-        pozitifButtonText.text = myPopUp.pozitifButtonTextString;
-        negatifButtonText.text = myPopUp.negatifButtonTextString;
+        titleText.text = myUsingPopUp.title;
+        messageText.text = myUsingPopUp.message;
+        pozitifButtonImage.color = myUsingPopUp.pozitifButtonColor;
+        negatifButtonImage.color = myUsingPopUp.negatifButtonColor;
+        pozitifButtonText.text = myUsingPopUp.pozitifButtonTextString;
+        negatifButtonText.text = myUsingPopUp.negatifButtonTextString;
 
         genelPopUpPanel.SetActive(true);
         isActive = true;
-        StartCoroutine(FadeTime(myPopUp.fadeInDuration));
+        StartCoroutine(FadeTime(myUsingPopUp.fadeInDuration));
     }
     private void PopUpPanelSakla()
     {
@@ -210,6 +212,7 @@ public class PopUp_Manager : MonoSingletion<PopUp_Manager>
         // butonları -35 e taşı
         butonsTransform.anchoredPosition = new Vector2(butonsTransform.anchoredPosition.x, -50);
         genelPopUpPanel.SetActive(false);
+
         if (popUps.Count > 0)
         {
             SiradakiPopUpGoster();

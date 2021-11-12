@@ -7,10 +7,18 @@ public class PopUpTester : MonoBehaviour
 {
     private void Start()
     {
-        PopUp_Manager.Instance.PopUpPanelGoster();
-        PopUp_Manager.Instance.SetTitle("SetTitle").SetMessage("SetMessage")
+        PopUp_Manager.Instance.SetTitle("SetTitle1").SetMessage("SetMessage1")
             .SetPozitifAction(pozitif).SetNegatifAction(negatif)
-            .SetInputAction(input);
+            .SetInputAction(input).PopUpPanelGoster();
+        PopUp_Manager.Instance.SetTitle("SetTitle2").SetMessage("SetMessage2")
+            .SetPozitifAction(pozitif).SetNegatifAction(negatif)
+            .SetInputAction(input).PopUpPanelGoster();
+        PopUp_Manager.Instance.SetTitle("SetTitle3").SetMessage("SetMessage3")
+            .SetPozitifAction(pozitif).SetNegatifAction(negatif)
+            .SetInputAction(input).PopUpPanelGoster();
+        PopUp_Manager.Instance.SetTitle("SetTitle4").SetMessage("SetMessage3")
+            .SetPozitifAction(pozitif).SetNegatifAction(negatif)
+            .SetInputAction(input).PopUpPanelGoster();
     }
     private void negatif()
     {
